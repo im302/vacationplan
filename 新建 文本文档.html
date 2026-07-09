@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小升初暑假 · 日程表</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #f0f4fa;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1300px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      padding: 28px 24px 36px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+      transition: all 0.2s;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0b1e33;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .subhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      border-bottom: 1px solid #e9edf4;
+      padding-bottom: 14px;
+    }
+
+    .subhead .tag {
+      background: #d9e6f5;
+      color: #1a4b7a;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 4px 16px;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
+    }
+
+    .live-status {
+      background: #eef6ff;
+      border-radius: 60px;
+      padding: 10px 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+      border: 1px solid #cdddec;
+      box-shadow: 0 2px 6px rgba(0,20,40,0.02);
+    }
+
+    .live-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 20px;
+      background: #2b7e3b;
+      display: inline-block;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0% { opacity: 0.6; transform: scale(0.95); }
+      50% { opacity: 1; transform: scale(1.15); }
+      100% { opacity: 0.6; transform: scale(0.95); }
+    }
+
+    .now-label {
+      color: #0b2c4a;
+      font-size: 16px;
+    }
+
+    .now-activity {
+      color: #003b7a;
+      font-weight: 700;
+      font-size: 18px;
+      background: white;
+      padding: 2px 18px 2px 14px;
+      border-radius: 40px;
+      border: 1px solid #b8cee6;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 8px;
+      border-radius: 20px;
+      border: 1px solid #e5ebf3;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      font-size: 14px;
+      min-width: 700px;
+    }
+
+    th {
+      background: #f7faff;
+      color: #1f3a5e;
+      font-weight: 600;
+      padding: 14px 8px;
+      border-bottom: 2px solid #d8e2f0;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    td {
+      padding: 12px 6px;
+      border-bottom: 1px solid #e9eef6;
+      text-align: center;
+      vertical-align: middle;
+      color: #1f2e46;
+    }
+
+    .time-col {
+      font-weight: 600;
+      color: #1a3d64;
+      background: #fafcff;
+      white-space: nowrap;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .weekday-col {
+      font-weight: 500;
+      background: #fafcff;
+    }
+
+    .weekend-col {
+      background: #f8faff;
+    }
+
+    .activity-tag {
+      background: #f0f5fe;
+      padding: 4px 10px;
+      border-radius: 40px;
+      display: inline-block;
+      font-weight: 500;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .game-tag {
+      background: #e1edfb;
+      color: #004080;
+    }
+
+    .study-tag {
+      background: #e3ecf9;
+      color: #1f4a7a;
+    }
+
+    .rest-tag {
+      background: #edf3fa;
+      color: #3a567a;
+    }
+
+    .sleep-tag {
+      background: #dce6f2;
+      color: #1f3a62;
+    }
+
+    .weekend-highlight {
+      background: #f4f9ff;
+    }
+
+    .footnote {
+      margin-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 14px;
+      color: #3b5780;
+      border-top: 1px solid #e0e8f2;
+      padding-top: 22px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+    }
+
+    .badge-math {
+      background: #d8e5fd;
+      color: #00337a;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 30px;
+      margin-left: 4px;
+    }
+
+    .mobile-tip {
+      display: none;
+      background: #eef4fc;
+      border-radius: 60px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #1f4880;
+    }
+
+    @media (max-width: 700px) {
+      .container { padding: 16px 12px; }
+      h1 { font-size: 22px; }
+      .live-status { padding: 6px 14px; flex-wrap: wrap; }
+      .now-activity { font-size: 15px; padding: 2px 12px; }
+      .mobile-tip { display: inline-block; }
+      table { font-size: 12px; min-width: 560px; }
+      td, th { padding: 8px 4px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container" id="app">
+
+  <div class="subhead">
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <h1>📅 小升初 · 暑假日程</h1>
+      <span class="tag">周一至周五 · 语文课</span>
+    </div>
+    <div class="live-status">
+      <span class="live-dot"></span>
+      <span class="now-label">🕒 现在</span>
+      <span class="now-activity" id="currentActivity">加载中…</span>
+    </div>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align:left; padding-left:14px;">⏰ 时间</th>
+          <th>周一</th>
+          <th>周二</th>
+          <th>周三</th>
+          <th>周四</th>
+          <th>周五</th>
+          <th>周六</th>
+          <th>周日</th>
+        </tr>
+      </thead>
+      <tbody id="scheduleBody">
+        <!-- 由 JS 动态渲染，便于维护 -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 图例 & 说明 -->
+  <div class="footnote">
+    <div class="legend">
+      <span><i style="background:#dcebf9;"></i> 语文/复习</span>
+      <span><i style="background:#d1e0f5;"></i> 游戏</span>
+      <span><i style="background:#e2ecf9;"></i> 作业/字帖</span>
+      <span><i style="background:#d3dff0;"></i> 休息/机动</span>
+      <span><i style="background:#c8d8ed;"></i> 数学课(机动)</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ----- 定义日程数据 (纯结构) -----
+    // 时间段 (显示用)
+    const timeSlots = [
+      { id: 't1', label: '07:30-08:00' },
+      { id: 't2', label: '08:00-08:20' },
+      { id: 't3', label: '08:30-12:00' },
+      { id: 't4', label: '12:00-12:30' },
+      { id: 't5', label: '12:30-13:10' },
+      { id: 't6', label: '13:10-14:00' },
+      { id: 't7', label: '14:00-16:00' },
+      { id: 't8', label: '16:00-17:30' },
+      { id: 't9', label: '17:30-18:00' },
+      { id: 't10', label: '18:00-19:00' },
+      { id: 't11', label: '19:00-21:30' },
+      { id: 't12', label: '21:30-22:30' },
+      { id: 't13', label: '22:30' }
+    ];
+
+    // 周一到周日 (索引0=周一)
+    const weekDays = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
+    // 活动内容 (按行索引, 每行7个元素)
+    // 为了干净, 直接使用字符串, 周末特殊处理在渲染时判断
+    const activities = [
+      ['起床&早餐', '起床&早餐', '起床&早餐', '起床&早餐', '起床&早餐', '—', '—'],                // 07:30
+      ['晨读/预习', '晨读/预习', '晨读/预习', '晨读/预习', '晨读/预习', '—', '—'],              // 08:00
+      ['语文课', '语文课', '语文课', '语文课', '语文课', '—', '—'],                            // 08:30
+      ['午餐', '午餐', '午餐', '午餐', '午餐', '午餐', '午餐'],                                  // 12:00
+      ['午睡', '午睡', '午睡', '午睡', '午睡', '午睡', '午睡'],                                 // 12:30
+      ['自由休息', '自由休息', '自由休息', '自由休息', '自由休息', '自由休息', '自由休息'],        // 13:10
+      ['游戏时间', '游戏时间', '游戏时间', '游戏时间', '游戏时间', '游戏/休息', '游戏/休息'],      // 14:00
+      ['暑假作业', '暑假作业', '暑假作业', '暑假作业', '暑假作业', '—', '—'],                    // 16:00
+      ['字帖', '字帖', '字帖', '字帖', '字帖', '—', '—'],                                      // 17:30
+      ['晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由'], // 18:00
+      ['机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课'], // 19:00
+      ['洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡'], // 21:30
+      ['熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉']       // 22:30
+    ];
+
+    // 周六周日额外第一行 (09:00-10:00 语文复习) 特殊插入在起床后
+    // 由于表格结构固定, 我们在渲染时针对周六/周日单独处理 '09:00-10:00' 行插入在 07:30 与 08:30 之间?
+    // 为了整洁, 我们直接在表格里为周六增加一行 “09:00-10:00  语文复习”, 周日为 “—”
+    // 所以重新构造一个更灵活的渲染方式: 在 timeSlots 基础上, 对周六日增加一行.
+    // 但简单做法: 在表格中通过条件判断, 如果当前是周六/周日, 在第二行后插入额外行.
+    // 但表格行必须一致, 所以我们插入一个特殊行: 在 "08:00-08:20" 和 "08:30-12:00" 之间插入 "09:00-10:00" 只对周末有效.
+    // 更好的方式: 直接在渲染时动态组合.
+    // 采用更干净的方式：把时间槽扩展，周六日多一行“09:00-10:00”，且其他行合并。
+    // 这里为了清晰，手工在JS渲染时加入一个单独行：索引位置1.5 (在晨读和语文课之间)
+    // 我们重构：直接建立完整行数据
+
+    function buildRows() {
+      const rows = [];
+      // 第一行: 07:30
+      rows.push({
+        time: '07:30-08:00',
+        activities: ['起床&早餐', '起床&早餐', '起床&早餐', '起床&早餐', '起床&早餐', '—', '—']
+      });
+      // 第二行: 08:00
+      rows.push({
+        time: '08:00-08:20',
+        activities: ['晨读/预习', '晨读/预习', '晨读/预习', '晨读/预习', '晨读/预习', '—', '—']
+      });
+      // 特殊行: 周六 09:00-10:00 语文复习 , 周日无 (用 —)
+      rows.push({
+        time: '09:00-10:00',
+        activities: ['—', '—', '—', '—', '—', '语文复习', '—']
+      });
+      // 第三行: 08:30 语文课 (但实际时间跨度为08:30-12:00)
+      rows.push({
+        time: '08:30-12:00',
+        activities: ['语文课', '语文课', '语文课', '语文课', '语文课', '—', '—']
+      });
+      // 12:00
+      rows.push({
+        time: '12:00-12:30',
+        activities: ['午餐', '午餐', '午餐', '午餐', '午餐', '午餐', '午餐']
+      });
+      // 12:30
+      rows.push({
+        time: '12:30-13:10',
+        activities: ['午睡', '午睡', '午睡', '午睡', '午睡', '午睡', '午睡']
+      });
+      // 13:10
+      rows.push({
+        time: '13:10-14:00',
+        activities: ['自由休息', '自由休息', '自由休息', '自由休息', '自由休息', '自由休息', '自由休息']
+      });
+      // 14:00
+      rows.push({
+        time: '14:00-16:00',
+        activities: ['游戏时间', '游戏时间', '游戏时间', '游戏时间', '游戏时间', '游戏/休息', '游戏/休息']
+      });
+      // 16:00
+      rows.push({
+        time: '16:00-17:30',
+        activities: ['暑假作业', '暑假作业', '暑假作业', '暑假作业', '暑假作业', '—', '—']
+      });
+      // 17:30
+      rows.push({
+        time: '17:30-18:00',
+        activities: ['字帖', '字帖', '字帖', '字帖', '字帖', '—', '—']
+      });
+      // 18:00
+      rows.push({
+        time: '18:00-19:00',
+        activities: ['晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由', '晚餐&自由']
+      });
+      // 19:00
+      rows.push({
+        time: '19:00-21:30',
+        activities: ['机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课', '机动/数学课']
+      });
+      // 21:30
+      rows.push({
+        time: '21:30-22:30',
+        activities: ['洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡', '洗漱&准备睡']
+      });
+      // 22:30
+      rows.push({
+        time: '22:30',
+        activities: ['熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉', '熄灯睡觉']
+      });
+      return rows;
+    }
+
+    // ----- 渲染表格 -----
+    function renderTable() {
+      const rows = buildRows();
+      const tbody = document.getElementById('scheduleBody');
+      let html = '';
+
+      rows.forEach(row => {
+        const acts = row.activities;
+        // 判断是否为周末高亮 (周六日)
+        const isWeekend = (idx) => idx === 5 || idx === 6;
+        // 设置额外样式: 周末列背景
+        html += '<tr>';
+        // 时间列
+        html += `<td class="time-col" style="text-align:left; padding-left:14px;">${row.time}</td>`;
+
+        // 七列
+        for (let i = 0; i < 7; i++) {
+          let cell = acts[i] || '—';
+          let extraClass = '';
+          let tagClass = 'activity-tag';
+          // 根据内容加样式
+          if (cell.includes('游戏') || cell.includes('休息')) tagClass += ' game-tag';
+          else if (cell.includes('语文') || cell.includes('复习') || cell.includes('课')) tagClass += ' study-tag';
+          else if (cell.includes('午睡') || cell.includes('自由') || cell.includes('晚餐') || cell.includes('洗漱') || cell.includes('熄灯')) tagClass += ' rest-tag';
+          else if (cell.includes('作业') || cell.includes('字帖')) tagClass += ' study-tag';
+          else if (cell.includes('机动') || cell.includes('数学')) tagClass += ' rest-tag';
+          
+          // 周末特殊背景
+          if (i === 5 || i === 6) extraClass += ' weekend-col';
+          // 如果内容是 '—' 则显示为灰色
+          if (cell === '—') {
+            html += `<td class="${extraClass}" style="color:#b0c6dd;">—</td>`;
+          } else {
+            html += `<td class="${extraClass}"><span class="${tagClass}">${cell}</span></td>`;
+          }
+        }
+        html += '</tr>';
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    // ----- 实时状态 (当前活动) -----
+    function updateCurrentActivity() {
+      const now = new Date();
+      const day = now.getDay(); // 0=周日, 1=周一 ... 6=周六
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const currentMinutes = hours * 60 + minutes;
+
+      // 映射到我们的星期索引: 0=周一 ... 6=周日
+      let weekIndex = day - 1;
+      if (weekIndex === -1) weekIndex = 6; // 周日变为6
+
+      // 构建时间表 (用于查找)
+      const timeMap = [
+        { start: 7*60+30, label: '起床&早餐' },
+        { start: 8*60+0, label: '晨读/预习' },
+        { start: 8*60+30, label: '语文课' },    // 08:30
+        { start: 9*60+0, label: '语文复习' },    // 周六09:00
+        { start: 12*60+0, label: '午餐' },
+        { start: 12*60+30, label: '午睡' },
+        { start: 13*60+10, label: '自由休息' },
+        { start: 14*60+0, label: '游戏时间' },
+        { start: 16*60+0, label: '暑假作业' },
+        { start: 17*60+30, label: '字帖' },
+        { start: 18*60+0, label: '晚餐&自由' },
+        { start: 19*60+0, label: '机动/数学课' },
+        { start: 21*60+30, label: '洗漱&准备睡' },
+        { start: 22*60+30, label: '熄灯睡觉' }
+      ];
+
+      // 如果是周末, 替换部分活动
+      let isWeekend = (weekIndex === 5 || weekIndex === 6);
+      let currentActivity = '自由时间 🎉';
+      
+      // 特殊周末: 如果周六 09:00-10:00 显示语文复习
+      if (isWeekend && weekIndex === 5 && currentMinutes >= 9*60 && currentMinutes < 10*60) {
+        currentActivity = '语文复习';
+      } else if (isWeekend && weekIndex === 6 && currentMinutes >= 9*60 && currentMinutes < 10*60) {
+        currentActivity = '— (周日)';
+      } else {
+        // 查找当前时间段
+        let found = '自由时间 🎉';
+        for (let i = timeMap.length - 1; i >= 0; i--) {
+          if (currentMinutes >= timeMap[i].start) {
+            let label = timeMap[i].label;
+            // 如果周末且是 08:30-12:00 的语文课 替换为 游戏/自由
+            if (isWeekend && label === '语文课') {
+              found = '游戏/自由';
+            } else if (isWeekend && label === '暑假作业') {
+              found = '—';
+            } else if (isWeekend && label === '字帖') {
+              found = '—';
+            } else if (isWeekend && label === '晨读/预习') {
+              found = '—';
+            } else if (isWeekend && label === '起床&早餐') {
+              found = '起床&早餐 (自定)';
+            } else {
+              found = label;
+            }
+            // 周末特殊覆盖 14:00 后显示游戏/休息
+            if (isWeekend && (label === '游戏时间' || label === '机动/数学课' || label === '晚餐&自由')) {
+              if (label === '游戏时间') found = '游戏/休息';
+            }
+            break;
+          }
+        }
+        currentActivity = found;
+      }
+
+      // 如果当前时间在 22:30 之后 或 07:30 之前, 显示睡觉
+      if (currentMinutes >= 22*60+30 || currentMinutes < 7*60+30) {
+        currentActivity = '💤 睡觉时间';
+      }
+
+      document.getElementById('currentActivity').textContent = currentActivity;
+    }
+
+    // 初始化
+    renderTable();
+    updateCurrentActivity();
+    // 每分钟刷新一次
+    setInterval(updateCurrentActivity, 60000);
+  })();
+</script>
+</body>
+</html>
